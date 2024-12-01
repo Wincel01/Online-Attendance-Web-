@@ -9,21 +9,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const studentList = document.getElementById("student-list");
   const markAbsentBtn = document.getElementById("mark-absent");
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
+  // Load users and attendance from localStorage
+  let users = JSON.parse(localStorage.getItem("users")) || [];
   const attendance = JSON.parse(localStorage.getItem("attendance")) || [];
 
+  // Show login section
   function showLogin() {
     loginSection.style.display = "block";
     registerSection.style.display = "none";
     attendanceSection.style.display = "none";
   }
 
+  // Show registration section
   function showRegister() {
     loginSection.style.display = "none";
     registerSection.style.display = "block";
     attendanceSection.style.display = "none";
   }
 
+  // Show attendance section after login
   function showAttendance(username, role) {
     loginSection.style.display = "none";
     registerSection.style.display = "none";
@@ -41,58 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Populate the student list for the teacher to select from
   function populateStudentList() {
     const students = users.filter((user) => user.role === "student");
     studentList.innerHTML = students.map((s) => `<option value="${s.username}">${s.username}</option>`).join("");
   }
 
-  loginSection.querySelector("form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const role = document.getElementById("role").value;
-
-    const user = users.find((u) => u.username === username && u.password === password && u.role === role);
-
-    if (user) {
-      showAttendance(username, role);
-    } else {
-      alert("Invalid credentials!");
-    }
-  });
-
-  registerSection.querySelector("form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const username = document.getElementById("reg-username").value.trim();
-    const password = document.getElementById("reg-password").value.trim();
-    const role = document.getElementById("reg-role").value;
-
-    if (users.some((u) => u.username === username)) {
-      alert("Username already exists!");
-    } else {
-      users.push({ username, password, role });
-      localStorage.setItem("users", JSON.stringify(users)); // Save users to localStorage
-      alert("Registration successful!");
-      showLogin();
-    }
-  });
-
-  markAbsentBtn.addEventListener("click", () => {
-    const student = studentList.value;
-    const reason = document.getElementById("reason").value.trim();
-
-    if (student && reason) {
-      attendance.push({ student, reason });
-      localStorage.setItem("attendance", JSON.stringify(attendance)); // Save attendance to localStorage
-      alert(`${student} marked absent for: ${reason}`);
-    } else {
-      alert("Please select a student and provide a reason.");
-    }
-  });
-
-  function logout() {
-    showLogin();
-  }
-
-  showLogin();
-});
+  // Handle login form submission
+  loginSection.querySelector("form").addEventListener
+  
