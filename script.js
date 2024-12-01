@@ -52,5 +52,61 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Handle login form submission
-  loginSection.querySelector("form").addEventListener
-  
+  loginSection.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const role = document.getElementById("role").value;
+
+    const user = users.find((u) => u.username === username && u.password === password && u.role === role);
+
+    if (user) {
+      showAttendance(username, role);
+    } else {
+      alert("Invalid credentials!");
+    }
+  });
+
+  // Handle registration form submission
+  registerSection.querySelector("form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const username = document.getElementById("reg-username").value.trim();
+    const password = document.getElementById("reg-password").value.trim();
+    const role = document.getElementById("reg-role").value;
+
+    // Check if the username already exists
+    const existingUser = users.find((user) => user.username === username);
+    if (existingUser) {
+      alert("Username already exists! Please choose a different one.");
+    } else {
+      // Add the new user to the users array
+      users.push({ username, password, role });
+      localStorage.setItem("users", JSON.stringify(users)); // Save users to localStorage
+      alert("Registration successful! You can now log in.");
+      showLogin(); // Switch to login screen after registration
+    }
+  });
+
+  // Mark attendance for students
+  markAbsentBtn.addEventListener("click", () => {
+    const student = studentList.value;
+    const reason = document.getElementById("reason").value.trim();
+
+    if (student && reason) {
+      attendance.push({ student, reason });
+      localStorage.setItem("attendance", JSON.stringify(attendance)); // Save attendance to localStorage
+      alert(`${student} marked absent for: ${reason}`);
+    } else {
+      alert("Please select a student and provide a reason.");
+    }
+  });
+
+  // Logout function
+  function logout() {
+    showLogin();
+  }
+
+  // Initial page load show login screen
+  showLogin();
+});
+      
